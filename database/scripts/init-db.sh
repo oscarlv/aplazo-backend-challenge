@@ -2,8 +2,6 @@
 
 echo "=> MariaDB service is up and running"
 
-echo "Checking for databases to import from environment variables INSTALL_<DB_NAME>";
-
 if [ -n "$INSTALL_APLAZO" ]; then
     echo "=> Importing example database 'aplazo'"
     mariadb -uroot -p${MYSQL_ROOT_PASSWORD} -e "CREATE DATABASE aplazodb"
