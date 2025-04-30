@@ -54,6 +54,17 @@ public class ExceptionController {
         );
     }
 
+    @ExceptionHandler(UnauthorizedRequest.class)
+    public ResponseEntity<ErrorResponse> handleUnauthorizedRequestException(UnauthorizedRequest ex, WebRequest request) {
+        return buildErrorResponse(
+                ex.getCode(),
+                ex.getError(),
+                ex.getMessage(),
+                request,
+                HttpStatus.UNAUTHORIZED
+        );
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex, WebRequest request) {
 
