@@ -21,14 +21,8 @@ public class CustomerController {
 
     @PostMapping
     public ResponseEntity<CustomerResponse> createCustomer(
-            @RequestBody @Valid CustomerRequest request,
-            @RequestHeader(value = "X-Auth-Token", required = true) String token
+            @RequestBody @Valid CustomerRequest request
     ) {
-
-        if (!tokenService.isTokenValid(token)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
         CustomerResponse customerResponse = customerService.createCustomer(request);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -38,14 +32,8 @@ public class CustomerController {
 
     @GetMapping("/{customerId}")
     public ResponseEntity<CustomerResponse> getCustomerById(
-            @PathVariable Integer customerId,
-            @RequestHeader(value = "X-Auth-Token", required = true) String token
+            @PathVariable String customerId
     ) {
-
-        if (!tokenService.isTokenValid(token)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
         CustomerResponse customerResponse = customerService.getCustomerById(customerId);
         return ResponseEntity.ok(customerResponse);
     }

@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.UUID;
 
 @Builder
 @NoArgsConstructor
@@ -17,9 +18,8 @@ import java.time.OffsetDateTime;
 public class Customer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false)
-    private Integer id;
+    private UUID id;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

@@ -7,6 +7,6 @@ public interface CustomerService {
 
     CustomerResponse createCustomer(CustomerRequest request);
 
-    CustomerResponse getCustomerById(Integer id);
+    CustomerResponse getCustomerById(String id);
 
 }

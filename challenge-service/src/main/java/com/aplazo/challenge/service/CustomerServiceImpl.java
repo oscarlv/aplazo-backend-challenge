@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -23,6 +24,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerResponse createCustomer(CustomerRequest request) {
         Customer customer = Customer.builder()
+                .id(UUID.randomUUID())
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .secondLastName(request.getSecondLastName())
@@ -34,7 +36,7 @@ public class CustomerServiceImpl implements CustomerService {
         Customer savedCustomer = customerRepository.save(customer);
 
         return CustomerResponse.builder()
-                .id(savedCustomer.getId())
+                .id(savedCustomer.getId().toString())
                 .creditLineAmount(savedCustomer.getCreditLineAmount())
                 .availableCreditLineAmount(savedCustomer.getAvailableCreditLineAmount())
                 .createdAt(savedCustomer.getCreatedAt().toInstant().toString())
@@ -42,15 +44,25 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerResponse getCustomerById(Integer id) {
-        Customer customer = customerRepository.findById(id)
+    public CustomerResponse getCustomerById(String id) {
+
+        UUID uuid = validateAndParseCustomerId(id);
+        Customer customer = customerRepository.findById(uuid)
                 .orElseThrow(() -> new CustomerNotFoundException("Customer with ID " + id + " not found"));
 
         return CustomerResponse.builder()
-                .id(customer.getId())
+                .id(customer.getId().toString())
                 .creditLineAmount(customer.getCreditLineAmount())
                 .availableCreditLineAmount(customer.getAvailableCreditLineAmount())
                 .createdAt(customer.getCreatedAt().toString())
                 .build();
+    }
+
+    private UUID validateAndParseCustomerId(String customerId) {
+        try {
+            return UUID.fromString(customerId);
+        } catch (IllegalArgumentException ex) {
+            throw new CustomerNotFoundException("Customer with ID " + customerId + " not found");
+        }
     }
 }
