@@ -10,15 +10,18 @@ public final class ErrorCode {
 
     public static final String INVALID_CUSTOMER_REQUEST_CODE = "APZ000002";
     public static final String INVALID_CUSTOMER_REQUEST = "INVALID_CUSTOMER_REQUEST";
+    public static final String INVALID_CUSTOMER_REQUEST_MESSAGE_AGE_LIMIT = "Customer age must be between 18 and 65";
 
     public static final String RATE_LIMIT_ERROR_CODE = "APZ000003";
     public static final String RATE_LIMIT_ERROR = "RATE_LIMIT_ERROR";
 
     public static final String CUSTOMER_NOT_FOUND_CODE = "APZ000005";
     public static final String CUSTOMER_NOT_FOUND = "CUSTOMER_NOT_FOUND";
+    public static final String CUSTOMER_NOT_FOUND_MESSAGE = "Customer with ID %s not found";
 
     public static final String INVALID_LOAN_REQUEST_CODE = "APZ000006";
     public static final String INVALID_LOAN_REQUEST = "INVALID_LOAN_REQUEST";
+    public static final String INVALID_LOAN_REQUEST_MESSAGE = "Loan amount exceeds available credit line";
 
     public static final String UNAUTHORIZED_CODE = "APZ000007";
     public static final String UNAUTHORIZED = "UNAUTHORIZED";
@@ -26,4 +29,5 @@ public final class ErrorCode {
 
     public static final String LOAN_NOT_FOUD_CODE = "APZ000008";
     public static final String LOAN_NOT_FOUND = "LOAN_NOT_FOUND";
+    public static final String LOAN_NOT_FOUND_MESSAGE = "Loan with ID %s not found";
 }

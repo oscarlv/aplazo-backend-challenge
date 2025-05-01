@@ -1,10 +1,9 @@
 package com.aplazo.challenge.exception;
 
-import static com.aplazo.challenge.exception.ErrorCode.CUSTOMER_NOT_FOUND;
-import static com.aplazo.challenge.exception.ErrorCode.CUSTOMER_NOT_FOUND_CODE;
+import static com.aplazo.challenge.exception.ErrorCode.*;
 
 public class CustomerNotFoundException extends BaseException{
-    public CustomerNotFoundException(String message) {
-        super(CUSTOMER_NOT_FOUND_CODE, CUSTOMER_NOT_FOUND, message);
+    public CustomerNotFoundException(String id) {
+        super(CUSTOMER_NOT_FOUND_CODE, CUSTOMER_NOT_FOUND, String.format(CUSTOMER_NOT_FOUND_MESSAGE, id));
     }
 }

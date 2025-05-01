@@ -43,6 +43,17 @@ public class ExceptionController {
         );
     }
 
+    @ExceptionHandler(InvalidCustomerRequestException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidCustomerRequestException(InvalidCustomerRequestException ex, WebRequest request) {
+        return buildErrorResponse(
+                ex.getCode(),
+                ex.getError(),
+                ex.getMessage(),
+                request,
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
     @ExceptionHandler(CustomerNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleCustomerNotFoundException(CustomerNotFoundException ex, WebRequest request) {
         return buildErrorResponse(
@@ -54,8 +65,19 @@ public class ExceptionController {
         );
     }
 
-    @ExceptionHandler(UnauthorizedRequest.class)
-    public ResponseEntity<ErrorResponse> handleUnauthorizedRequestException(UnauthorizedRequest ex, WebRequest request) {
+    @ExceptionHandler(LoanNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleLoanNotFoundException(LoanNotFoundException ex, WebRequest request) {
+        return buildErrorResponse(
+                ex.getCode(),
+                ex.getError(),
+                ex.getMessage(),
+                request,
+                HttpStatus.NOT_FOUND
+        );
+    }
+
+    @ExceptionHandler(UnauthorizedRequestException.class)
+    public ResponseEntity<ErrorResponse> handleUnauthorizedRequestException(UnauthorizedRequestException ex, WebRequest request) {
         return buildErrorResponse(
                 ex.getCode(),
                 ex.getError(),
