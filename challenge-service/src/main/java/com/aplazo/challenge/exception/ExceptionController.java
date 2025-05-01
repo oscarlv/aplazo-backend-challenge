@@ -43,8 +43,8 @@ public class ExceptionController {
         );
     }
 
-    @ExceptionHandler(InvalidCustomerRequestException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidCustomerRequestException(InvalidCustomerRequestException ex, WebRequest request) {
+    @ExceptionHandler({InvalidCustomerRequestException.class, InvalidLoanRequestException.class})
+    public ResponseEntity<ErrorResponse> handleInvalidRequestException(BaseException ex, WebRequest request) {
         return buildErrorResponse(
                 ex.getCode(),
                 ex.getError(),
