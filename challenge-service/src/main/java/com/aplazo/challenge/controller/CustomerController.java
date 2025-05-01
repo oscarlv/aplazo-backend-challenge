@@ -11,9 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/v1/customers")
-@RequiredArgsConstructor
 public class CustomerController {
 
     private final CustomerService customerService;
