@@ -1,6 +1,6 @@
 package com.aplazo.challenge.config.interceptor;
 
-import com.aplazo.challenge.exception.UnauthorizedRequest;
+import com.aplazo.challenge.exception.UnauthorizedRequestException;
 import com.aplazo.challenge.service.TokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import static com.aplazo.challenge.exception.ErrorCode.UNAUTHORIZED_MESSAGE;
+import static com.aplazo.challenge.util.ServiceConstants.*;
 
 @Component
 @RequiredArgsConstructor
@@ -22,14 +23,14 @@ public class AuthTokenInterceptor implements HandlerInterceptor {
         String uri = request.getRequestURI();
         String method = request.getMethod();
 
-        if ("/v1/customers".equals(uri) && "POST".equalsIgnoreCase(method)) {
+        if (CUSTOMERS_PATH.equals(uri) && POST.equalsIgnoreCase(method)) {
             return true;
         }
 
-        String token = request.getHeader("X-Auth-Token");
+        String token = request.getHeader(AUTH_HEADER);
 
         if (!tokenService.isTokenValid(token)) {
-            throw new UnauthorizedRequest(UNAUTHORIZED_MESSAGE);
+            throw new UnauthorizedRequestException(UNAUTHORIZED_MESSAGE);
         }
 
         return true;
