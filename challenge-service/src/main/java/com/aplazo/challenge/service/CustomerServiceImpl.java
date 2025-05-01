@@ -7,6 +7,7 @@ import com.aplazo.challenge.exception.CustomerNotFoundException;
 import com.aplazo.challenge.exception.InvalidCustomerRequestException;
 import com.aplazo.challenge.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -14,8 +15,10 @@ import java.time.Period;
 import java.util.UUID;
 
 import static com.aplazo.challenge.exception.ErrorCode.INVALID_CUSTOMER_REQUEST_MESSAGE_AGE_LIMIT;
+import static com.aplazo.challenge.util.ServiceUtils.validateAndParseCustomerID;
 
 @RequiredArgsConstructor
+@Slf4j
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
@@ -23,6 +26,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerResponse createCustomer(CustomerRequest request) {
+        log.debug("Create customer request: {}", request);
 
         LocalDate birthDate = LocalDate.parse(request.getDateOfBirth());
         int age = calculateAge(birthDate);
@@ -50,8 +54,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerResponse getCustomerById(String id) {
+        log.info("Get customer by id: {}", id);
 
-        UUID uuid = validateAndParseCustomerId(id);
+        UUID uuid = validateAndParseCustomerID(id);
         Customer customer = customerRepository.findById(uuid)
                 .orElseThrow(() -> new CustomerNotFoundException(id));
 
@@ -63,13 +68,6 @@ public class CustomerServiceImpl implements CustomerService {
                 .build();
     }
 
-    private UUID validateAndParseCustomerId(String customerId) {
-        try {
-            return UUID.fromString(customerId);
-        } catch (IllegalArgumentException ex) {
-            throw new CustomerNotFoundException(customerId);
-        }
-    }
 
     private int calculateAge(LocalDate birthDate) {
         return Period.between(birthDate, LocalDate.now()).getYears();

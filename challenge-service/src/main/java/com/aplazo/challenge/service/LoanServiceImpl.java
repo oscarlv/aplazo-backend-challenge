@@ -15,6 +15,7 @@ import com.aplazo.challenge.model.LoanStatus;
 import com.aplazo.challenge.repository.CustomerRepository;
 import com.aplazo.challenge.repository.LoanRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -23,8 +24,10 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.aplazo.challenge.exception.ErrorCode.INVALID_LOAN_REQUEST_MESSAGE;
+import static com.aplazo.challenge.util.ServiceUtils.validateAndParseCustomerID;
 
 @RequiredArgsConstructor
+@Slf4j
 @Service
 public class LoanServiceImpl implements LoanService {
 
@@ -33,12 +36,14 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     public LoanResponse createLoan(LoanRequest request) {
-        UUID customerId = validateAndParseLoanId(request.getCustomerId());
+        log.info("Creating a loan for customer id {}", request.getCustomerId());
 
+        UUID customerId = validateAndParseCustomerID(request.getCustomerId());
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new CustomerNotFoundException(request.getCustomerId()));
 
         if (request.getAmount() > customer.getAvailableCreditLineAmount()) {
+
             throw new InvalidLoanRequestException(INVALID_LOAN_REQUEST_MESSAGE);
         }
 
@@ -77,11 +82,13 @@ public class LoanServiceImpl implements LoanService {
         return toLoanResponse(loan);
     }
 
-    private UUID validateAndParseLoanId(String value) {
+    private UUID validateAndParseLoanId(String loanId) {
         try {
-            return UUID.fromString(value);
+            log.info("Validating loan id {}", loanId);
+            return UUID.fromString(loanId);
         } catch (IllegalArgumentException ex) {
-            throw new LoanNotFoundException(value);
+            log.warn("Loan ID {} is not a valid UUID", loanId, ex);
+            throw new LoanNotFoundException(loanId);
         }
     }
 
